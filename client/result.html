@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <script lang="JavaScript" src="echarts.js"></script>
+ <script lang="JavaScript" src="jquery-3.1.1.js"></script>
+ <script type="text/javascript" src="echarts-cloudword.js"></script>
+<style type="text/css">
+#title{
+	 height:100px;
+	 font:50px "Courier New", Courier, monospace;
+	 line-height:100px;
+	 background:#1EA679;
+	 text-align:center;
+	  }
+</style>
+<body>
+    <div id = "title">Word Frequency Statistic</div>
+<div style="height:400ox;">
+        	<div id = "wordcloud" style="width: 50%;height:400px;float:left"></div>
+        	<div id = "piechart" style="width: 50%;height:400px;float:right"></div>
+        </div>
+        <div style="height:400ox;">
+        	<div id = "scatterchart" style = "width:50%;height:400px;float:left"></div>
+        	<div id = "histogram" style="width: 50%;height:400px;float:right"></div>
+        </div>
+
+</body>
+ <script>
+getWordCloud("http://127.0.0.1:8082/ciyun");//里面传个链接
+function getWordCloud(ucurl){
+	$.ajax({
+		type:"get",
+		url:ucurl,
+		async:true,
+		success:function(data){
+			data = JSON.parse(data);
+			handleData(data);
+            handleRoseData(data);
+            handleBarData(data);
+            handlePointData(data);
+		}
+	})
+};
+function handleData(jdata){
+   var myChart = echarts.init(document.getElementById('wordcloud'));
+    option = {
+        backgroundColor: '#eee',
+        title:{
+            text:"Word Frequency Statistics-WordCloud",
+            x: 'center',
+        },
+        tooltip: {},
+        series: [{
+            type: 'wordCloud',
+            gridSize: 20,
+            sizeRange: [12, 50],
+            rotationRange: [0, 0],
+            shape: 'circle',
+            textStyle: {
+                normal: {
+                    color: function() {
+                        return 'rgb(' + [
+                            Math.round(Math.random() * 160),
+                            Math.round(Math.random() * 160),
+                            Math.round(Math.random() * 160)
+                        ].join(',') + ')';
+                    }
+                },
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowColor: '#333'
+                }
+            },
+            //需要的数据在这里：一个词+词频  “Sam S Club”可以返回文章的topic 或者 title。
+            data: jdata,
+        } ]
+    };
+    myChart.setOption(option);
+}
+function handleRoseData(jdata){
+    var roess =[];
+    for(var i =0;i<20;i++){
+        roess.push(jdata[i].name);
+    }
+    var myChart = echarts.init(document.getElementById('piechart'));
+	option = {
+        backgroundColor: '#F2EADA',
+        title : {
+            text: 'Word Frequency Statistics-Rose Chart',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            x : 'center',
+            y : 'bottom',
+            //这里需要的是词
+            data:roess
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel']
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        series : [
+            {
+                name:'Word Frequency(radius):',
+                type:'pie',
+                radius : [42, 150],
+                center : ['25%', '50%'],
+                roseType : 'radius',
+                label: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                lableLine: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                //需要的数据：词的个数+词
+                data:jdata
+            },
+            {
+                name:'word frequency(area):',
+                type:'pie',
+                radius : [42, 150],
+                center : ['75%', '50%'],
+                roseType : 'area',
+                label: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                lableLine: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                //跟上面的数据一样
+                data:jdata
+            }
+        ]
+    };
+    myChart.setOption(option);
+
+}
+
+function handleBarData(jdata){
+     var names =[],values=[];
+    for(var i =0;i<jdata.length;i++){
+        names.push(jdata[i].name);
+        values.push(jdata[i].value);
+    } 
+    var myChart = echarts.init(document.getElementById('histogram'));
+    option = {
+        backgroundColor: '#eee',
+        color: [ '#017983'],
+        title: {
+            text: 'Word Frequency Statistic-Histogram',
+            x:'center'
+        },
+        tooltip: {
+            trigger: 'axis',
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+            type: 'category',
+            splitLine:{
+                show:false
+            },
+            axisTick: {
+                alignWithLabel: true
+            },
+            // 这里是词
+            data: names
+        },
+        series: [
+            {
+                name: 'Word Frequency:',
+                type: 'bar',
+            //这里是对应的个数
+                data:values
+            }
+        ]
+    };
+    myChart.setOption(option);
+}
+function handlePointData(data){
+    var pfrequency,sum =0,pdatas = [],pointdata =[];
+
+    for(var i =0;i<data.length;i++){
+        sum+=data[i].value;
+    }
+    for(var j=0;j<data.length;j++){
+        pfrequency = (data[j].value/sum)*100;
+        pdatas.push([data[j].value,pfrequency,data[j].name]);
+    }
+   pointdata.push(pdatas);
+   console.log(pointdata);
+    var myChart = echarts.init(document.getElementById('scatterchart'));
+
+    // var data = [
+    //     [
+    //     //需要的数据 1.个数 2.频率（频率*100） 3. 词
+    //         [28, 7, 'Australia'],
+    //         [31, 7, 'Canada'],
+    //         [15, 6, 'China'],
+    //         [13, 7, 'Cuba'],
+    //         [2, 5, 'Finland'],
+    //         [29, 1, 'France'],
+    //         [31, 5.4, 'Germany'],
+    //         [2, 1, 'Iceland'],
+    //         [17, 7, 'India'],
+    //         [20, 1, 'Japan'],
+    //         [20, 9, 'North Korea'],
+    //         [12, 2, 'South Korea'],
+    //         [2, 7, 'New Zealand'],
+    //         [4, 7, 'Norway'],
+    //         [10, 7, 'Poland'],
+    //         [19, 6, 'Russia'],
+    //         [10, 4, 'Turkey'],
+    //         [24, 7, 'United Kingdom'],
+    //         [32, 3, 'United States']
+    //     ]
+    // ];
+
+    option = {
+        backgroundColor: '#F2EADA',
+        title: {
+            text: 'Word Frequency Statistics-Scatter Chart',
+            x: 'center',
+        },
+        legend: {
+            x: 'center',
+            y: 'bottom',
+        },
+        tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross'
+                },
+            
+            },    
+        xAxis: {
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
+                }
+            }
+        },
+        yAxis: [{
+            type: 'value',
+            splitNumber: 4,
+            max: 20,
+            min: 0,
+            interval: 20,
+            axisLabel: {
+                formatter: function(value) {
+                    return value.toFixed(2) + '%';
+                }
+            },
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+        }],
+
+        series: [{
+            name: 'Word Frequency:',
+            data: pointdata[0],
+            type: 'scatter',
+            symbolSize: function(data) {
+                return (data[0]);
+            },
+            label: {
+                emphasis: {
+                    show: true,
+                    formatter: function(param) {
+                        return param.data[2] + param.data[0];
+                    },
+                    position: 'top'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(120, 36, 50, 0.5)',
+                    shadowOffsetY: 5,
+                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                        offset: 0,
+                        color: 'rgb(234,97,124)'
+                    }, {
+                        offset: 1,
+                        color: 'rgb(213,89,111)'
+                    }])
+                }
+            }
+        }]
+    };
+    myChart.setOption(option);
+}
+  </script>
+  <script>//散点图
+  
+ </script>
+  
+
+
+
+</html>

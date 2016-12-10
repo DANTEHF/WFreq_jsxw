@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <script lang="JavaScript" src="echarts.js"></script>
+    <script lang="JavaScript" src="jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="echarts-cloudword.js"></script>
+    <style type="text/css">
+    body{
+        height: 100%;
+        margin: 0;
+    }
+       #header{
+		   height:100%;
+           position: relative;
+		   width:100%;
+		   background:transparent;
+		   background-image:url("1214911.jpg");
+		   
+		      display: block;  
+	   }
+	   #title{
+		   height:100px;
+		   font-size:50px;
+		   color:#FFF;
+		   text-align:center;
+		   font-family:"Courier New", Courier, monospace;
+		   font-weight:800;
+		   line-height:100px;
+		   }
+	.overlay {
+		height:100%;
+		   width:100%;
+    /*z-index: 1;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;*/
+    background: rgba(0, 0, 0, 0.5);
+}
+.col-lg-12{
+    position: absolute;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    /*bottom: 30%;*/
+    top:15%;
+    width: 100%;
+    /*top:100px;*/
+}
+.o-container {
+    margin: 50px auto 70px auto;
+    padding: 0 12px;
+    max-width: 960px;
+}
+.c-slack {
+    position: relative;
+    z-index: 100;
+    margin: 40px auto;
+    width: 96px;
+    height: 96px;
+    -webkit-transform: rotate(-15deg);
+    -ms-transform: rotate(-15deg);
+    transform: rotate(-15deg);
+}
+.c-slack__dot {
+    display: block;
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    mix-blend-mode: multiply;
+}
+.c-slack__dot--a {
+    top: 0;
+    left: 0;
+    background-color: #3eb991;
+	width:20px;
+	height:96px;
+    -webkit-transform: translateX(18px);
+    -ms-transform: translateX(18px);
+    transform: translateX(18px);
+    -webkit-animation: slack-animation--a 2s infinite;
+    animation: slack-animation--a 2s infinite;
+}
+.c-slack__dot--b {
+    top: 0;
+    right: 0;
+	width:96px;
+	height:20px;
+    background-color: #6ecadc;
+    -webkit-transform: translateY(18px);
+    -ms-transform: translateY(18px);
+    transform: translateY(18px);
+    -webkit-animation: slack-animation--b 2s infinite;
+    animation: slack-animation--b 2s infinite;
+}
+.c-slack__dot--c {
+    bottom: 0;
+    right: 0;
+    background-color: #e9a820;
+	width:20px;
+	height:96px;
+    -webkit-transform: translateX(-18px);
+    -ms-transform: translateX(-18px);
+    transform: translateX(-18px);
+    webkit-animation: slack-animation--c 2s infinite;
+    animation: slack-animation--c 2s infinite;
+}
+.c-slack__dot--d {
+    bottom: 0;
+    left: 0;
+    background-color: #e01563;
+	width:96px;
+	height:20px;
+    -webkit-transform: translateY(-18px);
+    -ms-transform: translateY(-18px);
+    transform: translateY(-18px);
+    webkit-animation: slack-animation--d 2s infinite;
+    animation: slack-animation--d 2s infinite;
+}
+#header  .intro-lead-in {
+    margin-bottom: 30px;
+    font-family: 'Shadows Into Light', cursive;
+    font-style: italic;
+    font-size: 42px;
+	color:#FFF;
+	text-align:center;
+}
+#header  .intro-heading {
+    margin-bottom: 30px;
+    font-family: 'Shadows Into Light', cursive;
+    font-style: italic;
+    font-size: 18px;
+	color:#FFF;
+	text-align:center;
+}
+.file-box{
+	text-align:center;
+    margin-top: 70px;
+}
+h2{
+	font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 700;
+	font-size:45px;
+	text-align:center;
+}
+.intro{
+	margin-bottom: 75px;
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 22px;
+    font-style: italic;
+	text-align:center
+}
+.col-lg-13{
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+    </style>
+</head>
+
+<body>
+	<div id = "header">
+    <div class="overlay">
+    <div id="title"> Word Frequency Statistics</div>
+    <div class="col-lg-12">
+		<div class="o-container">
+			<div class="c-slack">
+				<span class="c-slack__dot c-slack__dot--a"></span>
+				<span class="c-slack__dot c-slack__dot--b"></span>
+				<span class="c-slack__dot c-slack__dot--c"></span>
+				<span class="c-slack__dot c-slack__dot--d"></span>
+			</div>
+		</div>
+		<div class="intro-text">
+			<div class="intro-lead-in">Welcome!</div>
+			<div class="intro-heading">Select target file(s). Just ONCE upload click ,please WAIT a few seconds for tool handling. Results will be shown when handling sucesses!</div>
+		</div>
+	<form method="POST" action="http://127.0.0.1:8082/upload" enctype="multipart/form-data">
+
+        <div id="upload">
+            <div class="file-box">
+                <input type="file" name="upfile" class="file" id="fileField" size="28" multiple/>
+                <input type="submit" id="submit" value="upload" />
+            </div>
+        </div>
+    </form>
+    </div>
+    
+
+</div>
+</div>
+	<div class="col-lg-13">
+		<h2>Provided by</h2>
+		<hr>
+		<div class="intro">He Fan,Liu Min,Wang Jiayu,Xu Pingjian</div>
+	</div>
+    <script>
+    var height = $(window).height();
+    $(document.body).height(height);
+    </script>
+</body>
+ 
+
+
+</html>
