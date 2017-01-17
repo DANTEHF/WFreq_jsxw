@@ -7,6 +7,8 @@ import os
 import argparse
 import json
 from collections import Counter
+import mysql.connector
+import datetime
 
 __all__ = ['WordFinder', 'Book']
 
@@ -161,22 +163,108 @@ if __name__ == '__main__':
     max_width = max(len(str(v)) for v in result.values())
 
     report = []
-    #index = 0
+    index = 0
     for word in sorted(result, key=lambda x: result[x], reverse=True):
         data={"value":result[word],"name":word}
         report.append(data)
-        #index=index+1
-       # if index > 20:
-          #  break
+        index=index+1
+        if index > 30:
+            break
     in_json=json.dumps(report)
     print(in_json)
 
-      #  report.append('{:>{}} {}'.format(result[word], max_width, word))
+      
  
     if args.output_file:
         with open(args.output_file, 'w') as output:
-            #print(LINE_SEP.join(report))
-            output.write(in_json)#LINE_SEP.join(in_json))
-          #  output.write(LINE_SEP)
+            
+            output.write(in_json)
+            print "xieruchenggong"
+
+        rdate=(args.output_file).split('_')[1]
+        ryear=rdate[0:4]
+        rmonth=str(rdate[4:6])
+        print ryear
+        print rmonth
+        if rmonth=='01':
+            dmonth="month1"
+        elif rmonth=='02':
+            dmonth="month2"
+        elif rmonth=='03':
+            dmonth="month3"
+        elif rmonth=='04':
+            dmonth="month4"
+        elif rmonth=='05':
+            dmonth="month5"
+        elif rmonth=='06':
+            dmonth="month6"
+        elif rmonth=='07':
+            dmonth="month7"
+        elif rmonth=='08':
+            dmonth="month8"
+        elif rmonth=='09':
+            dmonth="month9"
+        elif rmonth=='10':
+            dmonth="month10"
+        elif rmonth=='11':
+            dmonth="month11"
+        elif rmonth=='12':
+            dmonth="month12"                                
+
+        print "connect mysql"
+        cnx=mysql.connector.connect(user='root',password='',host='localhost',database='jsxwx')
+        cnr=cnx.cursor(buffered=True)
+        print "test1" 
+
+        with open(args.output_file,'r') as fo :
+            print "test2"
+            data=json.load(fo)
+            lenth =len(data)
+            thisdict={}
+            for i in range(0,20):
+                word = data[i]['name']
+                value =data[i]['value']
+                thisdict[word]=value
+                cnr.execute("SELECT * FROM %s WHERE word='%s' and year='%s' " %(dmonth,word,ryear))
+                res=cnr.fetchall()
+                if len(res)==1 :
+                    sql="UPDATE %s SET freq = freq + %d WHERE word='%s'and year='%s' " %(dmonth,value,word,ryear)
+                    print sql
+                    cnr.execute(sql)
+                    cnx.commit()
+                    print "update"
+                elif len(res)==0:
+                    sql="INSERT INTO %s(word,freq,year) VALUES('%s','%d','%s')" %(dmonth,word,value,ryear)
+                    print sql
+                    cnr.execute(sql)
+                    cnx.commit()
+                    print "insert"
+        
+        sql1="SELECT * FROM docfreq WHERE year='%s' " %(ryear)
+        cnr.execute(sql1)
+        res=cnr.fetchall()
+        if len(res)==1:
+            sql2="UPDATE docfreq SET %s = %s + 1 WHERE year='%s'" %(dmonth,dmonth,ryear)
+            cnr.execute(sql2)
+            cnx.commit()
+            print "-----update doc freq-----"
+        elif len(res)==0:
+            sql3="INSERT INTO docfreq(year,%s) VALUES('%s',1)" %(dmonth,ryear)
+            cnr.execute(sql3)
+            cnx.commit()
+            print "-----insert new year-----"
+        cnx.close()        
+          
     else:
         print(LINE_SEP.join(report))
+
+
+
+
+
+
+
+
+
+
+

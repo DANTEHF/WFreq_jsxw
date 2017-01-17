@@ -3874,7 +3874,6 @@ busty	bustier bustiest
 busy	busied busier busies busiest busily busying busyness
 busybody	busybodies
 busywork
-but	buts
 butane
 butch	butches
 butcher	butchered butchering butchers
@@ -3912,9 +3911,6 @@ buzzer	buzzers
 buzzkill	buzzkills
 buzzsaw	buzzsaws
 buzzword	buzzwords
-by
-bye	byes
-bye-bye	bye-byes
 by-election	by-elections
 bygone	bygones
 bylaw	byelaw byelaws bylaws
@@ -11530,7 +11526,6 @@ footwork
 footy	footie
 fop	foppish foppishness fops
 foppery
-for
 forage	foraged forages foraging
 forager	foragers
 foray	forayed foraying forays
@@ -13430,8 +13425,6 @@ haunch	haunches
 haunt	haunted haunting hauntingly haunts
 haunter	haunters
 hauteur
-have	had hadst has hast hath haves having
-haven	havens
 haversack	haversacks
 havoc
 haw	hawed hawing haws
@@ -13458,7 +13451,6 @@ hazer	hazers
 hazing	hazings
 hazmat
 hazy	hazier haziest hazily haziness
-he	hes him hims
 head	headed heading headless heads
 headache	headaches
 headband	headbands
@@ -15823,7 +15815,6 @@ issue	issued issues issuing
 issuer	issuers
 isthmian
 isthmus	isthmi isthmuses
-it
 italic	italics
 italicization	italicisation
 italicize	italicise italicised italicises italicising italicized italicizes italicizing
@@ -24247,7 +24238,6 @@ razor-sharp
 razz	razzed razzes razzing
 razzle
 razzmatazz	razzamatazz
-re
 reabsorb	reabsorbed reabsorbing reabsorbs
 reach	reached reaches reaching
 reachable
@@ -30170,7 +30160,6 @@ thesis	theses
 thespian	thespians
 theta	thetas
 thew	thews
-they	them
 thiamine	thiamin
 thick	thicker thickest thickly thickness
 thicken	thickened thickening thickens
@@ -34045,11 +34034,8 @@ yonder
 yonks
 yoof
 yore
-you	ya yous
 young	younger youngest youngish
 youngster	youngsters
-your	yer yours
-yourself	yourselves
 youth	youthful youthfully youthfulness youths
 yowl	yowled yowling yowls
 ytterbium

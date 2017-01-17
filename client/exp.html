@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <script lang="JavaScript" src="echarts.js"></script>
+  <script lang="JavaScript" src="jquery-3.1.1.js"></script>
+<title>TOTAL- Word Frequency Statistics</title>
+</head>
+<body>
+<div id = "year" style = "width:100%;height:500px;"></div>
+<form id="select2show" >
+    <p>Year</p>
+    <select id="chooseyear">
+        <option value="2017">2017</option>
+        <option value="2016">2016</option>
+        <option value="2015">2015</option>
+        <option value="2014">2014</option>
+        <option value="2013">2013</option>
+    </select>
+    <p>Month</p>
+    <select id="choosemonth">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+    </select>
+    <input id="acksub" type="submit" value="GO"></input>
+</form>
+<div id = "monthlytop10" style  ="width:100%;height:500px;"></div>
+</body>
+<script>
+ $.ajax({
+     type:"get",
+     url:"http://localhost:8082/docfreq",
+     success:function(data){
+      //   data=JSON.parse(data);
+         console.log(data);
+         handleDocFreq(data);
+     },
+ });
+ $('#acksub').click(function(){
+     event.preventDefault();
+     var year=$('#chooseyear').find("option:selected").text();
+     var month=$('#choosemonth').find("option:selected").text();
+     console.log(year+month);
+    $.ajax({
+		type:"post",
+		url:"http://localhost:8082/monthlytop10",
+        data:{year:year,month:month},
+		success:function(data){
+        //    data=JSON.parse(data);
+            console.log(data);
+            
+            handleMonthTop(data);
+		},
+        
+	});
+ });
+
+
+//折线图
+function handleDocFreq(jsdata){
+    var allyear=[];
+    for(var i=0;i<5;i++){
+        allyear.push(jsdata[i].year);
+    }
+    console.log(allyear);
+
+var myChart = echarts.init(document.getElementById('year'));
+var option=  {
+        //timeline基本配置都写在baseoption 中
+            baseOption: {
+                timeline: {       
+                    axisType: 'category',
+                    show: true,
+                    autoPlay: true,//自动播放
+                    playInterval: 2500,//播放速度
+                    data: allyear,   //年数     
+                },               
+                grid: {containLabel: true},
+                xAxis: [{
+                    type: 'category',
+                    name: 'month',
+					
+                },],
+                yAxis: [{
+                    type: 'value',
+					name: 'quantity'
+                    
+                }],
+                series: [
+                    {
+                        type: 'line',                  
+                    },
+                ]
+            },
+            
+            
+            //变量则写在options中
+            options: [
+               //2013
+                {
+					backgroundColor: '#F2EADA',
+                    xAxis: [{
+                        data: ['January','February','March','April','May','June','July','August','September','October','November','December']
+                    }],
+					tooltip : {
+						trigger: 'axis'
+					},    
+                    title: {
+					    x:'center',
+                        text: 'Word Frequency Statistics-2014 Document Sum'
+                    },
+                    series: [{
+						name:'sum',
+						 markPoint: {
+							data: [
+							{type: 'max', name: '最大值'},
+							{type: 'min', name: '最小值'}
+							]
+						},
+						 itemStyle : {  
+                                normal : {  
+                                    color:'#397D9B', //最大最小的颜色 
+                                    lineStyle:{  
+                                        color:'#D54935'//这里可以改颜色，线的颜色
+                                    }  
+                                }  
+                            },  
+                           data: [jsdata[0].month1,jsdata[0].month2,jsdata[0].month3,jsdata[0].month4,jsdata[0].month5,jsdata[0].month6,jsdata[0].month7,jsdata[0].month8,jsdata[0].month9,jsdata[0].month10,jsdata[0].month11,jsdata[0].month12]//数据在这里，这里是文档数
+                        
+						},]
+                },
+                //2014
+                {
+					backgroundColor: '#F2EADA',
+                    xAxis: [{
+                        data: ['January','February','March','April','May','June','July','August','September','October','November','December']
+                    }],
+					tooltip : {
+						trigger: 'axis'
+					},    
+                    title: {
+					    x:'center',
+                        text: 'Word Frequency Statistics-2014 Document Sum'
+                    },
+                    series: [{
+						name:'sum',
+						 markPoint: {
+							data: [
+							{type: 'max', name: '最大值'},
+							{type: 'min', name: '最小值'}
+							]
+						},
+						 itemStyle : {  
+                                normal : {  
+                                    color:'#397D9B', //最大最小的颜色 
+                                    lineStyle:{  
+                                        color:'#D54935'//这里可以改颜色，线的颜色
+                                    }  
+                                }  
+                            },  
+                           data: [jsdata[1].month1,jsdata[1].month2,jsdata[1].month3,jsdata[1].month4,jsdata[1].month5,jsdata[1].month6,jsdata[1].month7,jsdata[1].month8,jsdata[1].month9,jsdata[1].month10,jsdata[1].month11,jsdata[1].month12]//数据在这里，这里是文档数
+                        
+						},]
+                },
+				//2015
+				 {
+                    xAxis: [{
+                        data: ['January','February','March','April','May','June','July','August','September','October','November','December']
+                    }],
+                    title: {
+                        text: 'Word Frequency Statistics-2015 Document Sum'
+                    },
+                    series: [
+                        {
+                            data: [jsdata[2].month1,jsdata[2].month2,jsdata[2].month3,jsdata[2].month4,jsdata[2].month5,jsdata[2].month6,jsdata[2].month7,jsdata[2].month8,jsdata[2].month9,jsdata[2].month10,jsdata[2].month11,jsdata[2].month12]//这里是文档数
+                        },
+
+                    ]
+                },
+				//2016
+				 {
+                    xAxis: [{
+                        data: ['January','February','March','April','May','June','July','August','September','October','November','December']
+                    }],
+                    title: {
+                        text: 'Word Frequency Statistics-2016 Document Sum'
+                    },
+                    series: [
+                        {
+                            data: [jsdata[3].month1,jsdata[3].month2,jsdata[3].month3,jsdata[3].month4,jsdata[3].month5,jsdata[3].month6,jsdata[3].month7,jsdata[3].month8,jsdata[3].month9,jsdata[3].month10,jsdata[3].month11,jsdata[3].month12]//这里是文档数
+                        },
+
+                    ]
+                },
+                //2017
+                {
+                     xAxis: [{
+                        data: ['January','February','March','April','May','June','July','August','September','October','November','December']
+                    }],
+                    title: {
+                        text: 'Word Frequency Statistics-2017 Document Sum'
+                    },
+                    series: [
+                        {
+                            data: [jsdata[4].month1,jsdata[4].month2,jsdata[4].month3,jsdata[4].month4,jsdata[4].month5,jsdata[4].month6,jsdata[4].month7,jsdata[4].month8,jsdata[4].month9,jsdata[4].month10,jsdata[4].month11,jsdata[4].month12]//这里是文档数
+                        },
+
+                    ]
+                },
+            ]
+        };
+myChart.setOption(option);
+}
+//top10的柱状图
+function handleMonthTop(jsdata){
+    
+     var year=$('#chooseyear').find("option:selected").text();
+     var month=$('#choosemonth').find("option:selected").text();
+     var year_month=year+'-'+month;
+     var words=[],freq=[]
+     console.log(" show tubiao ----"+jsdata);
+     for(var i =0;i<jsdata.length;i++){
+         words.push(jsdata[i].word);
+         freq.push(jsdata[i].freq);
+     }
+     console.log(words+"----"+freq );
+var myChart = echarts.init(document.getElementById('monthlytop10'));
+option = {
+	backgroundColor: '#eee',
+    title: {
+		x:'center',
+        text: 'Word Frequency Statistics-Monthly Top10',
+		subtext:year_month,//这里你可以实现一个月份读入，不行就算了删掉就好
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+		name:'word',
+        data: words,//数据在这里，这里是词
+        splitLine: {
+            show: false
+        },
+        axisTick: {
+            alignWithLabel: true
+        },
+		 axisLine: {
+			show: true,
+		    lineStyle: {
+                color: "#017983",
+              }
+		 }
+    }],
+    yAxis: [{
+        type: 'value',
+		name:'frequency(%)',
+		max: 40,
+		min:0,
+		splitArea: {
+            show:false,
+                    },
+        axisLine: {
+			show: true,
+		    lineStyle: {
+                color: "#666",
+                        }
+                    },
+       
+    }],
+    series: [{
+        name: '频率',
+        type: 'bar',
+        label: {
+            normal: {
+                show: true,
+                position: 'top'
+            }
+        },
+        itemStyle: {
+            normal: {
+                color: function(params) {
+                    // build a color map as your need.
+                    var colorList = [
+                        '#C1232B', '#B5C334', '#FCCE10', '#E87C25', '#27727B',
+                        '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
+                        '#D7504B', '#C6E579', '#F4E001', '#F0805A', '#26C0C0'
+                    ];//这儿的颜色可以改
+                    return colorList[params.dataIndex]
+                },
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{b}\n{c}%'
+                }
+            }
+        },
+        data: freq,//这里是个数
+    }]
+};
+myChart.setOption(option);
+}
+</script>
+</html>

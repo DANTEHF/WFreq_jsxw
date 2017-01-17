@@ -10,12 +10,17 @@ var fs=require('fs');
 var formidable =require('formidable');
 var childprocess=require('child_process');
 var mysql=require('mysql');
+var bodyParser = require('body-parser');
 
 
-var filePath="C:/Users/hf876/Desktop/Demo/";
 
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(helmet());
 app.use(express.static(__dirname+'/public'));
+
+var filePath="C:/Users/hf876/Desktop/Demo/";
 
 app.get('/',function(req,res){
     res.sendFile(filePath+"client/index.html");
@@ -72,18 +77,68 @@ app.get('/ciyun',function(req,res){
 
 });
 
+app.get('/reqtotal',function(req,res){
+  res.sendFile(filePath+"client/exp.html");
+})
+
+app.post('/monthlytop10',function(req,res){
+  var year =req.body.year;
+  var month="month"+req.body.month;
+  
+  console.log(year+month);
+  var sql="select * from "+month+" where year="+year+" order by freq desc limit 10";
+  connection.query(sql,function(err,result){
+      if(err){
+
+          console.log('[SELECT ERROR] - ',err.message);
+
+          return;
+
+        }       
+
+       console.log('---------------SELECT----------------');
+
+       console.log(result); 
+      // var jsdata=JSON.stringify(result);
+       res.send(result);
+       
+  })
+
+})
+
+app.get('/docfreq',function(req,res){
+  var sqldoc="select * from docfreq";
+  connection.query(sqldoc,function(err,result){
+          if(err){
+
+          console.log('[SELECT ERROR] - ',err.message);
+
+          return;
+
+        }       
+
+       console.log('---------------SELECT----------------');
+
+       console.log(result); 
+      // var jsdata=JSON.stringify(result);
+       res.send(result);
+       
+
+  });
+});
+
 app.listen(8082);
 
 
 console.log("Server running at http://127.0.0.1:8082/");
 
-/*function connect(){
 
 var connection=mysql.createConnection({
       host:'localhost',
-      uses :'root',
+      user:'root',
       password: '',
       port:'3306',
+      database:'jsxwx',
 });
 connection.connect(function(err){
   if(err){
@@ -93,5 +148,25 @@ connection.connect(function(err){
   
 console.log('connect success!');
 })
-}
-connect();*/
+//获取top10
+var sql1 ='select * from dict  order by total desc limit 10';
+var sql2 ='select * from dict  order by total desc limit 20';
+
+
+// app.get('/total',function(req,res){
+  
+  
+//   connection.query(sql1,function(err,result){
+//     if(err){
+//         console.log('[SELECT ERROR] - ',err.message);
+//         return;
+//     }       
+//        console.log('---------------SELECT----------------');
+//        console.log(result); 
+//        var jsdata=JSON.stringify(result);
+//        res.send(jsdata);
+//        console.log(jsdata)
+
+//   });
+  
+//})
