@@ -152,21 +152,3 @@ console.log('connect success!');
 var sql1 ='select * from dict  order by total desc limit 10';
 var sql2 ='select * from dict  order by total desc limit 20';
 
-
-// app.get('/total',function(req,res){
-  
-  
-//   connection.query(sql1,function(err,result){
-//     if(err){
-//         console.log('[SELECT ERROR] - ',err.message);
-//         return;
-//     }       
-//        console.log('---------------SELECT----------------');
-//        console.log(result); 
-//        var jsdata=JSON.stringify(result);
-//        res.send(jsdata);
-//        console.log(jsdata)
-
-//   });
-  
-//})

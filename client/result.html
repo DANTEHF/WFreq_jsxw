@@ -24,11 +24,11 @@
         	<div id = "scatterchart" style = "width:50%;height:400px;float:left"></div>
         	<div id = "histogram" style="width: 50%;height:400px;float:right"></div>
         </div>
-        <div style="height: 800ox;">
+        <!--<div style="height: 800ox;">
 
             <div id="totalgraph" style="width: 100%;height:800px;float:right" ></div>
 
-        </div>
+        </div>-->
 </body>
  <script>
 getWordCloud("http://localhost:8082/ciyun");//里面传个链接
@@ -47,19 +47,8 @@ function getWordCloud(ucurl){
 		}
 	})
 };
-//getTotal("http://localhost:8082/total");
-function getTotal(ucurl){
-	$.ajax({
-		type:"get",
-		url:ucurl,
-		async:true,
-		success:function(data){
-			data = JSON.parse(data);
-			handleTotalData(data)
-            
-		}
-	})
-};
+
+
 
 function handleData(jdata){
    var myChart = echarts.init(document.getElementById('wordcloud'));
@@ -331,136 +320,136 @@ function handlePointData(data){
     myChart.setOption(option);
 }
 
-function handleTotalData(jsdata){
-    var name=[ ]
-    for(var i =0; i< jsdata.length;i++){
+// function handleTotalData(jsdata){
+//     var name=[ ]
+//     for(var i =0; i< jsdata.length;i++){
 
-      name.push(jsdata[i].name)
+//       name.push(jsdata[i].name)
 
 
-    }
-  console.log(name);
+//     }
+//   console.log(name);
  
 
 
-var myChart =echarts.init(document.getElementById('totalgraph'));
+// var myChart =echarts.init(document.getElementById('totalgraph'));
     
-option = {
-    backgroundColor: "#a73e5c",
-    color: ['#ffd285', '#ff733f', '#ec4863'],
-    title: {
-        text: '本周内词频top10/20数据变化',
-        x: '5%',
-        top: '3%',
-        textStyle: {
-            color: '#ffd285'
-        }
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        x: 200,
-        top: '3%',
-        textStyle: {
-            color: '#ffd285',
-        },
-        data: name,
-    },
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-    },
-    xAxis: {
-        type: 'category',
-        "axisLine": {
-            lineStyle: {
-                color: '#c0576d'
-            }
-        },
-        axisLabel: {
-            textStyle: {
-                color: '#ffd285'
-            }
-        },
-        boundaryGap: false,
-        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-    },
-    yAxis: {
-        "axisLine": {
-            lineStyle: {
-                color: '#c0576d'
-            }
-        },
-        splitLine: {
-            show: true,
-            lineStyle: {
-                color: '#c0576d'
-            }
-        },
-        axisLabel: {
-            textStyle: {
-                color: '#ffd285'
-            }
-        },
-        type: 'value'
-    },
-    series: [{
-        name: jsdata[0].name,
-        type: 'line',
+// option = {
+//     backgroundColor: "#a73e5c",
+//     color: ['#ffd285', '#ff733f', '#ec4863'],
+//     title: {
+//         text: '本周内词频top10/20数据变化',
+//         x: '5%',
+//         top: '3%',
+//         textStyle: {
+//             color: '#ffd285'
+//         }
+//     },
+//     tooltip: {
+//         trigger: 'axis'
+//     },
+//     legend: {
+//         x: 200,
+//         top: '3%',
+//         textStyle: {
+//             color: '#ffd285',
+//         },
+//         data: name,
+//     },
+//     grid: {
+//         left: '3%',
+//         right: '4%',
+//         bottom: '3%',
+//         containLabel: true
+//     },
+//     xAxis: {
+//         type: 'category',
+//         "axisLine": {
+//             lineStyle: {
+//                 color: '#c0576d'
+//             }
+//         },
+//         axisLabel: {
+//             textStyle: {
+//                 color: '#ffd285'
+//             }
+//         },
+//         boundaryGap: false,
+//         data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+//     },
+//     yAxis: {
+//         "axisLine": {
+//             lineStyle: {
+//                 color: '#c0576d'
+//             }
+//         },
+//         splitLine: {
+//             show: true,
+//             lineStyle: {
+//                 color: '#c0576d'
+//             }
+//         },
+//         axisLabel: {
+//             textStyle: {
+//                 color: '#ffd285'
+//             }
+//         },
+//         type: 'value'
+//     },
+//     series: [{
+//         name: jsdata[0].name,
+//         type: 'line',
 
-        data: [jsdata[0].yi, jsdata[0].er, jsdata[0].san, jsdata[0].si, jsdata[0].wu, jsdata[0].liu, jsdata[0].ri ]
-    }, {
-        name: jsdata[1].name,
-        type: 'line',
+//         data: [jsdata[0].yi, jsdata[0].er, jsdata[0].san, jsdata[0].si, jsdata[0].wu, jsdata[0].liu, jsdata[0].ri ]
+//     }, {
+//         name: jsdata[1].name,
+//         type: 'line',
 
-        data: [jsdata[1].yi, jsdata[1].er, jsdata[1].san, jsdata[1].si, jsdata[1].wu, jsdata[1].liu, jsdata[1].ri ]
-    }, {
-        name: jsdata[2].name,
-        type: 'line',
+//         data: [jsdata[1].yi, jsdata[1].er, jsdata[1].san, jsdata[1].si, jsdata[1].wu, jsdata[1].liu, jsdata[1].ri ]
+//     }, {
+//         name: jsdata[2].name,
+//         type: 'line',
 
-        data: [jsdata[2].yi, jsdata[2].er, jsdata[2].san, jsdata[2].si, jsdata[2].wu, jsdata[2].liu, jsdata[2].ri  ]
-    },{
-        name: jsdata[3].name,
-        type: 'line',
+//         data: [jsdata[2].yi, jsdata[2].er, jsdata[2].san, jsdata[2].si, jsdata[2].wu, jsdata[2].liu, jsdata[2].ri  ]
+//     },{
+//         name: jsdata[3].name,
+//         type: 'line',
 
-        data: [jsdata[3].yi, jsdata[3].er, jsdata[3].san, jsdata[3].si, jsdata[3].wu, jsdata[3].liu, jsdata[3].ri  ]
-    },{
-        name: jsdata[4].name,
-        type: 'line',
+//         data: [jsdata[3].yi, jsdata[3].er, jsdata[3].san, jsdata[3].si, jsdata[3].wu, jsdata[3].liu, jsdata[3].ri  ]
+//     },{
+//         name: jsdata[4].name,
+//         type: 'line',
 
-        data: [jsdata[4].yi, jsdata[4].er, jsdata[4].san, jsdata[4].si, jsdata[4].wu, jsdata[4].liu, jsdata[4].ri  ]
-    },{
-        name: jsdata[5].name,
-        type: 'line',
+//         data: [jsdata[4].yi, jsdata[4].er, jsdata[4].san, jsdata[4].si, jsdata[4].wu, jsdata[4].liu, jsdata[4].ri  ]
+//     },{
+//         name: jsdata[5].name,
+//         type: 'line',
 
-        data: [jsdata[5].yi, jsdata[5].er, jsdata[5].san, jsdata[5].si, jsdata[5].wu, jsdata[5].liu, jsdata[5].ri  ]
-    },{
-        name: jsdata[6].name,
-        type: 'line',
+//         data: [jsdata[5].yi, jsdata[5].er, jsdata[5].san, jsdata[5].si, jsdata[5].wu, jsdata[5].liu, jsdata[5].ri  ]
+//     },{
+//         name: jsdata[6].name,
+//         type: 'line',
 
-        data: [jsdata[6].yi, jsdata[6].er, jsdata[6].san, jsdata[6].si, jsdata[6].wu, jsdata[6].liu, jsdata[6].ri  ]
-    },{
-        name: jsdata[7].name,
-        type: 'line',
+//         data: [jsdata[6].yi, jsdata[6].er, jsdata[6].san, jsdata[6].si, jsdata[6].wu, jsdata[6].liu, jsdata[6].ri  ]
+//     },{
+//         name: jsdata[7].name,
+//         type: 'line',
 
-        data: [jsdata[7].yi, jsdata[7].er, jsdata[7].san, jsdata[7].si, jsdata[7].wu, jsdata[7].liu, jsdata[7].ri  ]
-    },{
-        name: jsdata[8].name,
-        type: 'line',
+//         data: [jsdata[7].yi, jsdata[7].er, jsdata[7].san, jsdata[7].si, jsdata[7].wu, jsdata[7].liu, jsdata[7].ri  ]
+//     },{
+//         name: jsdata[8].name,
+//         type: 'line',
 
-        data: [jsdata[8].yi, jsdata[8].er, jsdata[8].san, jsdata[8].si, jsdata[8].wu, jsdata[8].liu, jsdata[8].ri  ]
-    },{
-        name: jsdata[9].name,
-        type: 'line',
-        data: [jsdata[9].yi, jsdata[9].er, jsdata[9].san, jsdata[9].si, jsdata[9].wu, jsdata[9].liu, jsdata[9].ri  ]
-}],
+//         data: [jsdata[8].yi, jsdata[8].er, jsdata[8].san, jsdata[8].si, jsdata[8].wu, jsdata[8].liu, jsdata[8].ri  ]
+//     },{
+//         name: jsdata[9].name,
+//         type: 'line',
+//         data: [jsdata[9].yi, jsdata[9].er, jsdata[9].san, jsdata[9].si, jsdata[9].wu, jsdata[9].liu, jsdata[9].ri  ]
+// }],
    
-}
-     myChart.setOption(option);
-}
+// }
+//      myChart.setOption(option);
+// }
 
   </script>
 
